@@ -25,12 +25,12 @@ while True:
     while True:
         if (userguess == colorList[randomColor]):
             print("Yaaaay..... you guessed it!")
-            break
+            break #jumps out of the small while True Loop
         else:
             userguess = input("Nope, Try Again:)").lower()       
     play_again = input("Do you wanna play again? Type 'no' to quit.").lower()
     if play_again == "no":
-        break
+        break #jumps out of the big while True Loop
 print("Nice playing with you:)\nByee")
 
         
