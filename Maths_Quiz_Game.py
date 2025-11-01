@@ -17,7 +17,7 @@ userConfirm = ""
 while userConfirm != "no":
     R = requests.get("https://opentdb.com/api.php?amount=1&category=19&difficulty=medium&type=multiple")
     if (R.status_code != 200):
-        userConfirm = input("\nDo you want to play again? Type 'no' to exit or press ENTER to play again: ").lower()
+        userConfirm = input("\nIt seems there's been an error.\nDo you want to play again? Type 'no' to exit or press ENTER to play again: ").lower()
     else:    
         loadToDict = json.loads(R.text) #Converts json to python dictionary
         questions = loadToDict["results"][0]["question"] #accessing the questions from API
@@ -30,12 +30,12 @@ while userConfirm != "no":
         for multiple_choice in choices:#loop for display the multiple choice answers
             print(str(options)+ "." + html.unescape(multiple_choice))
             options += 1
-        #collecting user input
+        #collecting user input while handling error and validating input
         data_valid = False
         while data_valid == False:
             Useranswer = input("\nEnter the number option of the answer: ")
             try:
-                Useranswer = int(Useranswer)
+                Useranswer = int(Useranswer)#checking to use if input is a number
                 if Useranswer > len(choices) or Useranswer <= 0:
                     print("Please enter a valid option.")
                 else:
