@@ -32,13 +32,16 @@ while endinput != 2:
             print("Alphabets are not allowed.")#error message if the conversion to integer fails
 
 for url in urls_list:
-    R = requests.get(url)#sending the resquest to the URL
-    if(R.status_code == 200):#if status code is 200(which is the OK response)
-        print(f"{url} is Online✅")#Run this if response is OK
-    elif(R.status_code == 403):
-        print(f"{url} is Forbidden❌")#Run this if URL is forbidden
-    else:
-        print(f"{url} is Offline❌")#Run this if URL is Offline
+    try:#try block in case things go wrong with the link
+        R = requests.get(url)#sending the resquest to the URL
+        if(R.status_code == 200):#if status code is 200(which is the OK response)
+            print(f"{url} is Online✅")#Run this if response is OK
+        elif(R.status_code == 403):
+            print(f"{url} is Forbidden❌")#Run this if URL is forbidden
+        else:
+            print(f"{url} is Offline❌")#Run this if URL is Offline
+    except requests.exceptions.RequestException: #checking to see if url is invalid or unreachable
+        print(f"{url} is Invalid or Unreachable ⚠️")
 
 
 
