@@ -44,11 +44,14 @@ def multiple_rolls():
         rollNumber = input("How many dices do you want to roll?: ")
         try:
             rollNumber = int(rollNumber)#Try the integer conversion
-            for dice in range(rollNumber):#Looping this this number of times the user wants to roll the dice
-                roll = random.randint(1,6)
-                roll_list.append(roll)#Adding each result of the roll to a list
-            print(f"🎲 You rolled {roll_list}\nTotal : {sum(roll_list)}")
-            break
+            if rollNumber < 1:#Checking if the user types something below 1
+                print("Please enter a valid number of dices to roll.") 
+            else:
+                for dice in range(rollNumber):#Looping this this number of times the user wants to roll the dice
+                    roll = random.randint(1,6)
+                    roll_list.append(roll)#Adding each result of the roll to a list
+                print(f"🎲 You rolled {roll_list}\nTotal : {sum(roll_list)}")
+                break
         except:
             print("Please enter a valid number.")#If integer conversion doesn't work then it's likely an alphabet or something
 
