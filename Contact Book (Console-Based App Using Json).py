@@ -58,7 +58,7 @@ def add_new_contact():
     contactList.append(contactDict)#Putting the whole dictionary into a list (only way it can be converted to a json format)
     with open(filename, "w") as file:
         json.dump(contactList, file, indent = 4) #Converting or writing the list into a json file (Contacts.json) indent = 4 fives it some nice indentaation
-        
+
 
 
 def view_all_contacts():
@@ -91,7 +91,7 @@ def search_contact():
 
 
 #def delete_contact():
-    
+    #to be continued
 
 
 # add_new_contact()
