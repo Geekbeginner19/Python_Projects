@@ -52,7 +52,7 @@ def add_new_contact():
     contactDict.update({"email" : email})
     if os.path.exists(filename):#checking if the json file already exist
         with open(filename, "r") as file:#reads contacts in file as 'file'(safely)
-            contactList = json.load(file)#loads all contacts into
+            contactList = json.load(file)#loads all contacts into the contact list
     else:
         contactList = []
     contactList.append(contactDict)#Putting the whole dictionary into a list (only way it can be converted to a json format)
