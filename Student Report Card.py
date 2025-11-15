@@ -54,11 +54,12 @@
 # Exit gracefully.
 
 class Student:
-    def __init__(self, name, mathScore, englishScore, scienceScore):
+    def __init__(self, name, mathScore, englishScore, scienceScore, average):
         self.name = name 
         self.mathScore = mathScore
         self.englishScore = englishScore
         self.scienceScore = scienceScore
+        self.average = average
 
     def get_date(self):
         self.name = input("Please enter your name: ")
@@ -66,19 +67,18 @@ class Student:
         self.englishScore = float(input("Please enter your english score: "))
         self.scienceScore = float(input("Please enter your science score: "))
     
-    def calculate_average(self, average):
-        self.average = average
-        self.average = (self.mathScore + self.englishScore + self.scienceScore) / 3
-        return self.average
+    def calculate_average(self):
+        return (self.mathScore + self.englishScore + self.scienceScore) / 3
     
     def display_info(self):
+        average = self.calculate_average()
         print(self.name)
         print(self.mathScore)
         print(self.englishScore)
-        print(self.mathScore)
-        print(self.average)
+        print(self.scienceScore)
+        print(f"{average}")
     
 studentList = []
-student1 = Student("", "", "", "")
+student1 = Student("", "", "", "", "")
 student1.get_date()
 student1.display_info()
