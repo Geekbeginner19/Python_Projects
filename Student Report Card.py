@@ -54,18 +54,17 @@
 # Exit gracefully.
 
 class Student:
-    def __init__(self, name, mathScore, englishScore, scienceScore, average):
+    def __init__(self, name, mathScore, englishScore, scienceScore):
         self.name = name 
         self.mathScore = mathScore
         self.englishScore = englishScore
         self.scienceScore = scienceScore
-        self.average = average
 
     def get_date(self):
-        self.name = input("Please enter your name: ")
-        self.mathScore = float(input("Please enter you math score: "))
-        self.englishScore = float(input("Please enter your english score: "))
-        self.scienceScore = float(input("Please enter your science score: "))
+        self.name = name
+        self.mathScore = mathScore
+        self.englishScore = englishScore
+        self.scienceScore = scienceScore
     
     def calculate_average(self):
         return (self.mathScore + self.englishScore + self.scienceScore) / 3
@@ -77,8 +76,18 @@ class Student:
         print(self.englishScore)
         print(self.scienceScore)
         print(f"{average}")
-    
-studentList = []
-student1 = Student("", "", "", "", "")
-student1.get_date()
-student1.display_info()
+
+
+def collectInfo():
+    name = input("Please enter your name: ")
+    math = float(input("Please enter math score: "))
+    science = float(input("Please enter science score: "))
+    english = float(input("Please enter your english score: "))
+    return Student(name, math, english, science)
+
+s = collectInfo()
+StudentList = []
+StudentList.append(s)
+
+collectInfo()
+s.display_info
