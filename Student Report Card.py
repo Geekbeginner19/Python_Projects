@@ -60,22 +60,16 @@ class Student:
         self.englishScore = englishScore
         self.scienceScore = scienceScore
 
-    def get_date(self):
-        self.name = name
-        self.mathScore = mathScore
-        self.englishScore = englishScore
-        self.scienceScore = scienceScore
     
     def calculate_average(self):
         return (self.mathScore + self.englishScore + self.scienceScore) / 3
     
     def display_info(self):
         average = self.calculate_average()
-        print(self.name)
-        print(self.mathScore)
-        print(self.englishScore)
-        print(self.scienceScore)
-        print(f"{average}")
+        print(f"Name: {self.name} | Math Score: {self.mathScore} | English Score: {self.englishScore} | Science Score: {self.scienceScore}")
+
+
+studentList = []#Created a list for objects in the global scope
 
 
 def collectInfo():
@@ -83,11 +77,28 @@ def collectInfo():
     math = float(input("Please enter math score: "))
     science = float(input("Please enter science score: "))
     english = float(input("Please enter your english score: "))
-    return Student(name, math, english, science)
+    return Student(name, math, english, science)#Returns the Student Class with the above information as it parameters
+        
 
-s = collectInfo()
-StudentList = []
-StudentList.append(s)
 
-collectInfo()
-s.display_info
+while True:
+    options = input("\n--- Student Report Card ---\n1. Add Student\n2. View All Students\n3. Quit\n\nChoose an option>>> ")
+    try: 
+        options = int(options)
+        if options < 1 or options > 3:
+            print("Please enter a valid option.")
+        else:
+            if options == 1:
+                new_student = collectInfo() #assigning the class(Student) with it info to an object (new_student)
+                studentList.append(new_student)#Appending that each new object made(new_student) into the list(studentList)
+            elif(options == 2):
+                print("---- All Student Records ----")
+                for student in studentList:
+                    student.display_info()
+            elif(options == 3):
+                print("Goodbye")
+                break
+    except ValueError as V:
+        print(f"Invalid Option: {V}")
+
+
