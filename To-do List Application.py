@@ -35,59 +35,160 @@ Quit option:
 End the program gracefully with a goodbye message.
 '''
 
-task_dict = {}#creating a dictionary
-task_list = []#creating a list
-print("--- To-do List Console Application ---")
-while True:#Opening an infinite loop
-    options = int(input("\n1.Add a new task.\n2.View all tasks.\n3.Mark task as done\n4.Delete a task.\n5.Quit.\n\nChoose an option.\n>>>"))
-    if options == 1:
-        enterTask = input("Please enter a task: ").lower()
-        task_dict[enterTask] = "Pending"#adding the user input to a dictionary
-        print("Task entered successfully!")
-    elif options == 2:
-        if len(task_dict) == 0:#checking if dictionary is empty
-            print("No Tasks to Show")
-        else:
-            print("\nTasks List")
-            count = 1
-            for key, value in task_dict.items():
-                print(f"{count}.{key} - {value}")#Displying the contents of the Dictionary
-                count += 1
-    elif options == 3:
-        if len(task_dict) == 0:
-            print("No Tasks to Show")
-        else:
-            print("\nTasks List")
-            count = 1
-            for key, value in task_dict.items():
-                print(f"{count}.{key} - {value}")
-                count += 1
-            task_list = list(task_dict.keys())#appending keys of the dictionary to the a list
-            tasktToMark = int(input("Please enter the task number to mark as done: "))
-            if (tasktToMark >= 1) and (tasktToMark <= len(task_list)):#Setting protocol for the range of input
-                task_dict[task_list[tasktToMark - 1]] = "Done"#Updating the values of dictionary depending on what the user says
-            else:
-                print("Invalid Task Number.")
-    elif options == 4:
-        if len(task_dict) == 0:
-            print("No Shows to Show")
-        else:
-            print("\nTasks List")
-            count = 1
-            for key, value in task_dict.items():
-                print(f"{count}.{key} - {value}")
-                count += 1
-            task_list = list(task_dict.keys())
-            tasktToMark = int(input("Please enter the task number to delete: "))
-            if (tasktToMark >= 1) and (tasktToMark <= len(task_list)):#Setting protocol for the range of input
-                del task_dict[task_list[tasktToMark - 1]]#Deleting the values of dictionary depending on what the user says
-            else:
-                print("Invalid Task Number.")
-    elif options == 5:
-        print("Goodbye")
-        break
+#Option 1 No Persistence
 
-      
-    
+# task_dict = {}#creating a dictionary
+# task_list = []#creating a list
+# print("--- To-do List Console Application ---")
+# while True:#Opening an infinite loop
+#     options = int(input("\n1.Add a new task.\n2.View all tasks.\n3.Mark task as done\n4.Delete a task.\n5.Quit.\n\nChoose an option.\n>>>"))
+#     if options == 1:
+#         enterTask = input("Please enter a task: ").lower()
+#         task_dict[enterTask] = "Pending"#adding the user input to a dictionary
+#         print("Task entered successfully!")
+#     elif options == 2:
+#         if len(task_dict) == 0:#checking if dictionary is empty
+#             print("No Tasks to Show")
+#         else:
+#             print("\nTasks List")
+#             count = 1
+#             for key, value in task_dict.items():
+#                 print(f"{count}.{key} - {value}")#Displying the contents of the Dictionary
+#                 count += 1
+#     elif options == 3:
+#         if len(task_dict) == 0:
+#             print("No Tasks to Show")
+#         else:
+#             print("\nTasks List")
+#             count = 1
+#             for key, value in task_dict.items():
+#                 print(f"{count}.{key} - {value}")
+#                 count += 1
+#             task_list = list(task_dict.keys())#appending keys of the dictionary to the a list
+#             tasktToMark = int(input("Please enter the task number to mark as done: "))
+#             if (tasktToMark >= 1) and (tasktToMark <= len(task_list)):#Setting protocol for the range of input
+#                 task_dict[task_list[tasktToMark - 1]] = "Done"#Updating the values of dictionary depending on what the user says
+#             else:
+#                 print("Invalid Task Number.")
+#     elif options == 4:
+#         if len(task_dict) == 0:
+#             print("No Shows to Show")
+#         else:
+#             print("\nTasks List")
+#             count = 1
+#             for key, value in task_dict.items():
+#                 print(f"{count}.{key} - {value}")
+#                 count += 1
+#             task_list = list(task_dict.keys())
+#             tasktToMark = int(input("Please enter the task number to delete: "))
+#             if (tasktToMark >= 1) and (tasktToMark <= len(task_list)):#Setting protocol for the range of input
+#                 del task_dict[task_list[tasktToMark - 1]]#Deleting the values of dictionary depending on what the user says
+#             else:
+#                 print("Invalid Task Number.")
+#     elif options == 5:
+#         print("Goodbye")
+#         break
+
+#Option 2 : Saving Stuff into json file
+
+import os
+import json
+
+TaskList = []
+taskDict = {}
+filename = r"C:\Users\Rarissime\Downloads\Todo.json"
+
+def load_json():
+    global TaskList
+    if os.path.exists(filename):
+        with open(filename, "r") as file:
+            TaskList = json.load(file)
+    else:
+        TaskList = []
+
+def dump_json():
+    with open(filename, "w") as file:
+        json.dump(TaskList, file, indent = 4)        
+
+def add_new_task():
+    global TaskList
+    new_task = input("Please add a new task: ")
+    taskDict = {"task" : new_task, "status" : "pending"} #Best way to store info
+    load_json()
+    TaskList.append(taskDict)
+    dump_json()
+    print("Task added successfully\n")
+
+def view_all_tasks():
+    global TaskList
+    if os.path.exists(filename):
+        with open(filename) as file:
+            TaskList = json.load(file)
+        count = 1
+        if len(TaskList) == 0:
+            print("No Task to Show Here.")
+        else:
+            print("--- All Tasks ---")
+            for tasks in TaskList:
+                print(f"{count}. {tasks['task']} | {tasks['status']}")#Neat display as result of line 112
+                count += 1
+    else:
+        print("No tasks to view.")
+
+def mark_read():
+    global TaskList
+    if os.path.exists(filename):
+        with open(filename) as file:
+            TaskList = json.load(file)
+        count = 1    
+        for tasks in TaskList:
+            print(f"{count}.{tasks['task']} | {tasks['status']}")
+            count += 1
+        option = int(input("Choose the task you want to mark as read\n>>> "))#You don't need to compare anything, just take the input and fix it 
+        TaskList[option - 1]["status"] = "Done"
+        dump_json()#Always remember to update any mods
+        print("Task marked successfully\n")
+    else:
+        print("No tasks to view.")
 
 
+def del_task():
+    global TaskList
+    if os.path.exists(filename):
+        with open(filename) as file:
+            TaskList = json.load(file)
+        count = 1    
+        for tasks in TaskList:
+            print(f"{count}.{tasks['task']} | {tasks['status']}")
+            count += 1
+        option = int(input("Choose the task you want to delete.\n>>> "))
+        if option < 1 or option > len(TaskList):#smart error handling
+            print("Invalid task number!")
+        else:
+            TaskList.pop(option - 1)#Removes list by index
+            dump_json()#Always remember to update any mods
+            print("Tasks deleted\n")
+    else:
+        print("No tasks to view.")
+
+
+while True:
+    options = input("\n1.Add a new task.\n2.View all tasks.\n3.Mark task as done\n4.Delete a task.\n5.Quit.\n\nChoose an option.\n>>> ")
+    try:
+        options = int(options)
+        if options < 1 or options > 5:
+            print("Please enter a valid option")
+        else:
+            if options == 1:
+                add_new_task()
+            elif(options == 2):
+                view_all_tasks()
+            elif(options == 3):
+                mark_read()
+            elif(options == 4):
+                del_task()
+            elif(options == 5):
+                print("Goodbye!")
+                break
+    except ValueError as V:
+        print(f"Invalid option {V}")
