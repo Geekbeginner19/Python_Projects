@@ -35,7 +35,7 @@ def pass_strength(password):
     if len(password) < 8:
         failures += 1
     
-    if not any(ch.isupper() for ch in password):
+    if not any(ch.isupper() for ch in password):#looping through the password to check for only condition
         failures += 1
 
     if not any(ch.islower() for ch in password):
@@ -44,13 +44,13 @@ def pass_strength(password):
     if not any(ch.isdigit() for ch in password):
         failures += 1
 
-    if not any(ch in specials for ch in password):
+    if not any(ch in specials for ch in password):#partial search through the special variable 
         failures += 1
 
-    return failures
+    return failures#returning the value of the failures
 
 
-def get_strength_label(failures):
+def get_strength_label(failures):#Getting the strength levels
     if failures == 0:
         return "Strong"
     elif failures == 1:
@@ -60,7 +60,7 @@ def get_strength_label(failures):
     else:
         return "Very Weak"
 
-while True:
+while True:#Indefinite loop
     password = input("Please enter a password: ")
     failures = pass_strength(password)
     print(get_strength_label(failures))
