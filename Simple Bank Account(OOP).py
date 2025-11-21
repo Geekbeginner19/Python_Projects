@@ -22,22 +22,21 @@ class BankAccount():
         self.balance = balance
     
     def deposit(self, amount):#Not a good practice for methods in a class to be receiving input
-        self.amount = amount
-        if self.amount <= 0:
+        if amount <= 0:
             print("Deposit cannot be made in zeros and negatives.")
         else:
             self.balance += amount
-            print(f"{self.amount} successfully deposited!")
+            print(f"{amount} successfully deposited!")
         
     def withdraw(self, amount):
-        if self.amount > self.balance:
+        if amount > self.balance:
             print("Your balance is insufficient to make this transaction.")
         else:
             self.balance -= amount
-            print(f"{self.amount} successfully withdrawn!")
+            print(f"{amount} successfully withdrawn!")
     
     def display_balance(self):
-        print(f"Account Holder:{self.owner_name} | Balance: ${self.balance}")
+        print(f"Account Holder: {self.owner_name} | Balance: ${self.balance}")
 
 createdAccList = []
 
