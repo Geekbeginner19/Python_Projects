@@ -1,4 +1,4 @@
-# 🧩 MINI PROJECT 3: Encapsulated BankAccount
+# 🧩 MINI PROJECT 3: Encapsulated BankAccount with Inheritance
 
 # Create a BankAccount class with:
 # Private attribute
@@ -17,6 +17,20 @@
 # ✔️ No direct access like acc.__balance
 # ✔️ Only deposit/withdraw can modify balance
 # ✔️ Use a getter to check balance
+
+# Then create two Child Classes:
+
+# SavingsAccount(BankAccount)
+# has an extra method: add_interest(rate)
+
+# StudentAccount(BankAccount)
+# allows only 1 free withdrawal, afterwards fee = 5 per withdrawal
+# track number of withdrawals
+
+# Requirements:
+# Create one SavingsAccount and one StudentAccount.
+# Test deposit, withdraw, and the special features.
+# Use inheritance + super().
 
 # Example usage:
 # acc = BankAccount("Kelvin", 1000)
@@ -47,17 +61,34 @@ class BankAccount():
         return self.__balance
 
     def display_info(self):                                        #calling the get_balance() function to display private account balance
-        print(f"\nAccount Holder: {self.owner_name} | Account Balance: ${self.get_balance()}")
+        print(f"\nAccount Holder (Current Account): {self.owner_name} | Account Balance: ${self.get_balance()}")
 
     def set_balance(self, amount):#Setting acc balance so that it can't be in negatives
         if amount >= 0:
             self.__balance = amount
 
 class SavingsAccount(BankAccount):
-    def add_interest(self, rate):
-        pass
+    #Super() method is important if the child class needs a new attribute
+    #so the super() method is employed to override the parent class constructor in the child class
+    #in order to add a new attribute to the child class
+    def __init__(self, owner_name, balance):
+        super().__init__(owner_name, balance)   # calls BankAccount's __init__ (There is actually no need for that since the child class adds no new attributes)
     
-accList = []
+    def interest(self, time, rate = 0.10):
+        self.rate = rate 
+        self.time = time
+        return self.get_balance() * self.rate * time
+    
+    def display_info(self):
+        print(f"\nAccount Holder (Savings Account): {self.owner_name} | Interest Made: ${self.interest(time)} | Account Balance: ${self.interest(time) + self.get_balance()}")
+    
+
+accList = []    
+        
+def createSavAcc():
+    name = input("Please enter name: ")
+    balance = float(input("Please enter balance: "))
+    return SavingsAccount(name, balance)
     
 def createAcc():
     name = input("Please enter name: ")
@@ -74,33 +105,40 @@ def selectAcc():
 
 while True:
     print("\n===== Bank =====")
-    print("1. Create an Account.")
-    print("2. Deposit.")
-    print("3. Withdraw.")
-    print("4. Display Balance.")
-    print("5. Quit.\n")
+    print("1. Create a Current Account.")
+    print("2. Create a Saving Account. ")
+    print("3. Deposit.")
+    print("4. Withdraw.")
+    print("5. Display Balance.")
+    print("6. Quit.\n")
     options = input("Choose an option >>> ")
 
     try:
         options = int(options)
-        if options < 1 or options > 5:
+        if options < 1 or options > 6:
             print("Enter a valid option")
         else:
             if options == 1:
                 accountHolder = createAcc()
                 accList.append(accountHolder)
             elif(options == 2):
+                accountHolder = createSavAcc()
+                accList.append(accountHolder)
+                time = int(input("\nEnter the time for your interest (Years): "))
+                accountHolder.interest(time)
+                accountHolder.display_info()
+            elif(options == 3):
                 accountHolder = selectAcc()#AccountHolder stores whatever the selectAcc() function returns (which is the user selected object)
                 amount = float(input("Enter an amount: "))
                 accountHolder.deposit(amount)
-            elif(options == 3):
+            elif(options == 4):
                 accountHolder = selectAcc()
                 amount = float(input("Enter an amount: "))
                 accountHolder.withdraw(amount)
-            elif(options == 4):
+            elif(options == 5):
                 accountHolder = selectAcc()
                 accountHolder.display_info()
-            elif(options == 5):
+            elif(options == 6):
                 print("Goodbye!\n")
                 break
     except ValueError as V:
