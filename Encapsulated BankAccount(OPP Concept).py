@@ -53,6 +53,10 @@ class BankAccount():
         if amount >= 0:
             self.__balance = amount
 
+class SavingsAccount(BankAccount):
+    def add_interest(self, rate):
+        pass
+    
 accList = []
     
 def createAcc():
@@ -86,7 +90,7 @@ while True:
                 accountHolder = createAcc()
                 accList.append(accountHolder)
             elif(options == 2):
-                accountHolder = selectAcc()#AccountHolder stores whatever the selectAcc() function returns (which is the user selcted object)
+                accountHolder = selectAcc()#AccountHolder stores whatever the selectAcc() function returns (which is the user selected object)
                 amount = float(input("Enter an amount: "))
                 accountHolder.deposit(amount)
             elif(options == 3):
