@@ -38,7 +38,7 @@ class Movie:
         if seats > (self.total_seats - self.booked_seats):
             print("Cannot book more than available seats")
         else:
-            self.booked_seats = seats
+            self.booked_seats += seats
             print("Seats booked successfully!")
     
     def cancel_seats(self, seats:int):
@@ -80,12 +80,13 @@ class TicketManager:
                 mov.cancel_seats(seats)
             else:
                 continue
-                
+
+
 def movie_add():
     movie = input("Enter movie title: ")
     return Movie(movie)
 
-tikmanager = TicketManager()
+tikmanager = TicketManager() #Creating a TicketManager class in the main scope to handle inputs 
 
 while True:
     print("\n=== Movie Ticket Booking System ===")
