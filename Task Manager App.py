@@ -107,7 +107,7 @@ class TaskApp(tk.Tk):
     
         #Create a main frame for everything else
         self.mainframe = tk.Frame(self)
-        self.mainframe.pack(padx = 10, pady = 10, fill = "both", expand = True)
+        self.mainframe.pack(padx = 10, pady = 10, fill = "both", expand = True, anchor = "center")
 
         #Everything else goes onto the mainframe
         #tasks labels & entry
@@ -121,7 +121,20 @@ class TaskApp(tk.Tk):
             self.mainframe,
             text = "Add Task"
         )
-        self.task_button.grid(column = 1, row = 1, pady = 10)
+        self.task_button.grid(column = 2, row = 0, padx = 10)
+
+        #Search Task Label & Button
+        self.search_label = tk.Label(self.mainframe, text = "Search Task")
+        self.search_entry = tk.Entry(self.mainframe, width = 30)
+        self.search_button = tk.Button(
+            self.mainframe,
+            text = "Search"
+        )
+        #Placements
+        self.search_label.grid(column = 0, row = 1 )
+        self.search_entry.grid(column = 1, row = 1)
+        self.search_button.grid(column = 2, row = 1, pady = 10)
+
 
 
 store = TaskStore() #Creates an instance of TaskStore
