@@ -3,6 +3,7 @@ import os
 import json
 import tkinter as tk 
 from tkinter.font import Font
+from tkinter import messagebox
 
 filename = "Tasks.json"
 
@@ -107,20 +108,21 @@ class TaskApp(tk.Tk):
     
         #Create a main frame for everything else
         self.mainframe = tk.Frame(self)
-        self.mainframe.pack(padx = 10, pady = 10, fill = "both", expand = True, anchor = "center")
+        self.mainframe.pack(pady = 10)
 
         #Everything else goes onto the mainframe
         #tasks labels & entry
         self.task_label = tk.Label(self.mainframe, text = "Enter Task")
         self.task_entry = tk.Entry(self.mainframe, width = 30)
-        self.task_label.grid(column = 0, row = 0)
-        self.task_entry.grid(column = 1, row = 0)
 
         #add task button
         self.task_button = tk.Button(
             self.mainframe,
-            text = "Add Task"
+            text = "Add Task",
+            command = self.add_task
         )
+        self.task_label.grid(column = 0, row = 0)
+        self.task_entry.grid(column = 1, row = 0)
         self.task_button.grid(column = 2, row = 0, padx = 10)
 
         #Search Task Label & Button
@@ -135,6 +137,29 @@ class TaskApp(tk.Tk):
         self.search_entry.grid(column = 1, row = 1)
         self.search_button.grid(column = 2, row = 1, pady = 10)
 
+        #Frame2
+        self.frame2 = tk.Frame(self)
+        self.frame2.pack()
+
+        #Listbox & List Labels
+        self.task_listLabel = tk.Label(self.frame2, text = "Task List" )
+        self.task_listbox = tk.Listbox(self.frame2, width = 40, height = 15)
+        self.task_listLabel.grid(column = 1, row = 0)
+        self.task_listbox.grid(column = 1, row = 1, pady = 10)
+    
+    #Connecting Buttons to logic
+    #1. The Add_Task Button
+    def add_task(self):
+        title = self.task_entry.get()
+        try:
+            task = Task(title)
+            self.store.add_task(task)
+            self.store.jsondump()
+
+            self.task_listbox.insert(tk.END, f"{task.title}")
+            self.task_entry.delete(0, tk.END) 
+        except ValueError as e:
+            tk.messagebox.showerror("Error", str(e))
 
 
 store = TaskStore() #Creates an instance of TaskStore
