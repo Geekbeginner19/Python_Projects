@@ -130,7 +130,8 @@ class TaskApp(tk.Tk):
         self.search_entry = tk.Entry(self.mainframe, width = 30)
         self.search_button = tk.Button(
             self.mainframe,
-            text = "Search"
+            text = "Search",
+            command = self.search_tasks
         )
         #Placements
         self.search_label.grid(column = 0, row = 1 )
@@ -146,7 +147,14 @@ class TaskApp(tk.Tk):
         self.task_listbox = tk.Listbox(self.frame2, width = 40, height = 15)
         self.task_listLabel.grid(column = 1, row = 0)
         self.task_listbox.grid(column = 1, row = 1, pady = 10)
-    
+
+        self.view_all_tasks_button = tk.Button(
+            self.frame2,
+            text = "View All Tasks",
+            command = self.view_all_tasks
+        )
+        self.view_all_tasks_button.grid(column = 1, row = 2, pady = 10)
+
     #Connecting Buttons to logic
     #1. The Add_Task Button
     def add_task(self):
@@ -160,9 +168,35 @@ class TaskApp(tk.Tk):
             self.task_entry.delete(0, tk.END) 
         except ValueError as e:
             tk.messagebox.showerror("Error", str(e))
+    
+    def search_tasks(self):
+        name = self.search_entry.get()
 
+        self.task_listbox.delete(0, tk.END)
+        if len(self.store.taskLst) != 0:
+            found = False
+            for task in self.store.taskLst:
+                if name.lower() == task.title.lower():
+                    self.search_entry.delete(0, tk.END) #Clears entry
+                    self.task_listbox.insert(tk.END, f"{task.title}")
+                    found = True
+            if not found:
+                messagebox.showerror("Error","No Match Found")
+        else:
+            messagebox.showerror("Error","Nothing to Show here!")
+            return
+    
+    def view_all_tasks(self):
+        self.task_listbox.delete(0, tk.END)
+        if len(self.store.taskLst) != 0:
+            for task in self.store.taskLst:
+                self.task_listbox.insert(tk.END, f"{task.title}")
+        else:
+            messagebox.showerror("Error","Nothing to Show here!")
+            return
 
 store = TaskStore() #Creates an instance of TaskStore
+store.jsonload() #Loads data when app starts
 app = TaskApp(store) #Puts the instance of the TaskStore Class into the tkinter window
 app.mainloop() #Runs the whole shebang
 
