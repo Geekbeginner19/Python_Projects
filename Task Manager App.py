@@ -174,6 +174,7 @@ class TaskApp(tk.Tk):
         except ValueError as e:
             tk.messagebox.showerror("Error", str(e))
     
+    #Refreshing the listbox
     def refresh_listbox(self):        
         self.task_listbox.delete(0, tk.END)
 
@@ -184,7 +185,7 @@ class TaskApp(tk.Tk):
                 self.task_listbox.insert(tk.END, f"[ ] {task.title}")
 
     def search_tasks(self):
-        name = self.search_entry.get()
+        name = self.search_entry.get() #Collects entry info
 
         self.task_listbox.delete(0, tk.END)
         if len(self.store.taskLst) != 0:
@@ -192,7 +193,10 @@ class TaskApp(tk.Tk):
             for task in self.store.taskLst:
                 if name.lower() == task.title.lower():
                     self.search_entry.delete(0, tk.END) #Clears entry
-                    self.refresh_listbox()
+                    if task.completed: #Checks for task completion
+                        self.task_listbox.insert(tk.END, f"[✓] {task.title}")
+                    else:
+                        self.task_listbox.insert(tk.END, f"[ ] {task.title}")
                     found = True
             if not found:
                 messagebox.showerror("Error","No Match Found")
@@ -203,7 +207,7 @@ class TaskApp(tk.Tk):
     def view_all_tasks(self):
         self.refresh_listbox()
     
-    #Toggle to complete
+    #Double click to toggle to complete
     def toggle_task(self, event):        
         selection = self.task_listbox.curselection()
 
