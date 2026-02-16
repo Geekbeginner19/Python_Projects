@@ -147,6 +147,8 @@ class TaskApp(tk.Tk):
         self.task_listbox = tk.Listbox(self.frame2, width = 40, height = 15)
         self.task_listLabel.grid(column = 1, row = 0)
         self.task_listbox.grid(column = 1, row = 1, pady = 10)
+        #Toggle to complete button
+        self.task_listbox.bind("<Double-Button-1>", self.toggle_task)
 
         self.view_all_tasks_button = tk.Button(
             self.frame2,
@@ -154,6 +156,9 @@ class TaskApp(tk.Tk):
             command = self.view_all_tasks
         )
         self.view_all_tasks_button.grid(column = 1, row = 2, pady = 10)
+
+        # Load existing tasks visually
+        self.refresh_listbox()
 
     #Connecting Buttons to logic
     #1. The Add_Task Button
@@ -164,11 +169,20 @@ class TaskApp(tk.Tk):
             self.store.add_task(task)
             self.store.jsondump()
 
-            self.task_listbox.insert(tk.END, f"{task.title}")
+            self.task_listbox.insert(tk.END, f"[ ]{task.title}")
             self.task_entry.delete(0, tk.END) 
         except ValueError as e:
             tk.messagebox.showerror("Error", str(e))
     
+    def refresh_listbox(self):        
+        self.task_listbox.delete(0, tk.END)
+
+        for task in self.store.taskLst:
+            if task.completed:
+                self.task_listbox.insert(tk.END, f"[✓] {task.title}")
+            else:
+                self.task_listbox.insert(tk.END, f"[ ] {task.title}")
+
     def search_tasks(self):
         name = self.search_entry.get()
 
@@ -178,7 +192,7 @@ class TaskApp(tk.Tk):
             for task in self.store.taskLst:
                 if name.lower() == task.title.lower():
                     self.search_entry.delete(0, tk.END) #Clears entry
-                    self.task_listbox.insert(tk.END, f"{task.title}")
+                    self.refresh_listbox()
                     found = True
             if not found:
                 messagebox.showerror("Error","No Match Found")
@@ -187,13 +201,24 @@ class TaskApp(tk.Tk):
             return
     
     def view_all_tasks(self):
-        self.task_listbox.delete(0, tk.END)
-        if len(self.store.taskLst) != 0:
-            for task in self.store.taskLst:
-                self.task_listbox.insert(tk.END, f"{task.title}")
-        else:
-            messagebox.showerror("Error","Nothing to Show here!")
+        self.refresh_listbox()
+    
+    #Toggle to complete
+    def toggle_task(self, event):        
+        selection = self.task_listbox.curselection()
+
+        if not selection:
             return
+
+        index = selection[0]
+        task = self.store.taskLst[index]
+
+        # Toggle completion
+        task.completed = not task.completed
+
+        self.store.jsondump()
+        self.refresh_listbox()
+
 
 store = TaskStore() #Creates an instance of TaskStore
 store.jsonload() #Loads data when app starts
