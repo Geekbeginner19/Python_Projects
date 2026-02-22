@@ -62,16 +62,16 @@ class TaskStore:
         if not found:
             print("No Match Found")
         
-    def jsondump(self):
-        self.jsonLst = [] #clearing json list everytime I save prolly to prevent saving duplicates
-        if len(self.taskLst) != 0:
-            for task in self.taskLst: #Loops through tasks list
-                self.jsonLst.append(task.to_dict()) #adds all dictionary formatted tasks to the json list for saving
-            with open(filename, "w") as file: #save opening & closing of json files
-                json.dump(self.jsonLst, file, indent = 4) #saves with a neatly formatted values
-            print("\nTask Saved Successfully!")
-        else:
-            print("\nNo Tasks Available")
+    def jsondump(self):      
+        self.jsonLst = [] #Empties List
+
+        for task in self.taskLst:
+            self.jsonLst.append(task.to_dict())
+
+        with open(filename, "w") as file:
+            json.dump(self.jsonLst, file, indent=4)
+
+        print("\nTask Saved Successfully!")
     
     def jsonload(self):
         if os.path.exists(filename): #Checks if the contact json file path exists
@@ -90,7 +90,7 @@ class TaskApp(tk.Tk):
         super().__init__() #Very Important
         self.store = store
         self.title("Task Manager App")
-        self.geometry("400x500")
+        self.minsize(400, 500)
 
         #Creating Fonts
         font1 = Font(
@@ -160,6 +160,14 @@ class TaskApp(tk.Tk):
         # Load existing tasks visually
         self.refresh_listbox()
 
+        #Delete Tasks Button
+        self.delete_button = tk.Button(
+            self.frame2,
+            text = "Delete Task",
+            command = self.delete_task
+        )
+        self.delete_button.grid(column = 1, row = 3, pady = 5)
+
     #Connecting Buttons to logic
     #1. The Add_Task Button
     def add_task(self):
@@ -206,6 +214,9 @@ class TaskApp(tk.Tk):
     
     def view_all_tasks(self):
         self.refresh_listbox()
+        if len(self.store.taskLst) == 0:
+            messagebox.showerror("Error","No Tasks to View")
+            return
     
     #Double click to toggle to complete
     def toggle_task(self, event):        
@@ -222,6 +233,30 @@ class TaskApp(tk.Tk):
 
         self.store.jsondump()
         self.refresh_listbox()
+    
+    #Delete tasks
+    def delete_task(self):
+        selection = self.task_listbox.curselection()
+
+        if not selection:
+            messagebox.showerror("Error", "Select a task first")
+            return
+
+        # Get selected item text
+        selected_text = self.task_listbox.get(selection[0])
+
+        # Extract title (remove [ ] or [✓])
+        title = selected_text[4:].strip()
+
+        # Remove matching task from store
+        self.store.taskLst = [
+            task for task in self.store.taskLst
+            if task.title != title
+        ]
+
+        self.store.jsondump()
+        self.refresh_listbox()
+    
 
 
 store = TaskStore() #Creates an instance of TaskStore
